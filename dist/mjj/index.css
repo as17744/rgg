@@ -1,6 +1,97 @@
 
-.aa {
-    color: red;
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+textarea,
+p,
+blockquote,
+th,
+td,
+hr,
+button,
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  margin: 0;
+  padding: 0;
+}
+html,
+body {
+  background-color: #191970;
+}
+.wrapper {
+  overflow: hidden;
+  width: 16rem;
+  height: 14.93333333rem;
+  background: #000;
+  margin-top: 5.33333333rem;
+}
+.wrapper .title {
+  margin-top: 1.06666667rem;
+  color: #000;
+  text-align: center;
+  font-size: 0.85333333rem;
+}
+.wrapper .img-wrapper {
+  margin-top: 1.06666667rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16rem;
+  height: 8.53333333rem;
+}
+.wrapper .pic {
+  width: 6.4rem;
+  height: 6.4rem;
+  border-radius: 50%;
+  animation: scaleDraw 0.5s linear 0s infinite normal;
+}
+.wrapper .introduction {
+  padding: 0 0.64rem;
+  font-size: 0.64rem;
+  color: #f2f4f6;
+}
+@keyframes scaleDraw {
+  /*定义关键帧、scaleDrew是需要绑定到选择器的关键帧名称*/
+0% {
+    transform: scale(1);
+    /*开始为原始大小*/
+}
+25% {
+    transform: scale(1.2);
+    /*放大1.1倍*/
+}
+50% {
+    transform: scale(1);
+}
+75% {
+    transform: scale(1.2);
+}
 }
 
 /*# sourceMappingURL=index.css.map*/

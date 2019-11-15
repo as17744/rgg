@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <head>
+    <title>vue组件</title>
+  </head>
+  <body>
+    <div id="app">
+      <!-- <comps-a placeholder="lwk" class="ccc" v-model="num" ></comps-a> -->
+      <input :value="num" @input="tryInput" />
+      <comps-b :value.sync="num"></comps-b>
+      <comps-c>
+        <template v-slot:part-one>part1</template>
+        <template v-slot:part-two>part2</template>
+        <template v-slot:part-three="partThree">{{partThree.inner.type}}-{{partThree.inner.name}}</template>
+      </comps-c>
+      <comps-list :items="items">
+        <template #item="{item}">{{item.name}}</template>
+      </comps-list>
+      <comps-d></comps-d>
+    </div>
+  </body>
+</html>

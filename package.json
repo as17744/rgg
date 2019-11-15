@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node_modules/.bin/webpack --config ./bin/webpack.config.js --watch",
-    "start": "node_modules/.bin/webpack-dev-server --config ./bin/webpack.config.js"
+    "start": "node_modules/.bin/webpack-dev-server --config ./bin/webpack.config.js",
+    "build": "node_modules/.bin/webpack --config ./bin/webpack.config.js"
   },
   "author": "",
   "license": "ISC",
@@ -25,7 +26,7 @@
     "loadash": "^1.0.0",
     "style-loader": "^0.22.0",
     "vue-loader": "^15.4.0",
-    "vue-template-compiler": "^2.5.17",
+    "vue-template-compiler": "^2.6.10",
     "web-webpack-plugin": "^4.0.1",
     "webpack": "^4.16.5",
     "webpack-cli": "^3.1.0",
@@ -38,9 +39,11 @@
     "emoji-mart": "^2.8.1",
     "formidable": "^1.2.1",
     "koa": "^2.5.3",
+    "koa-xtpl": "^2.1.1",
     "mime": "^2.3.1",
+    "phaser": "^3.18.1",
     "socket.io": "^2.1.1",
-    "vue": "^2.5.17",
+    "vue": "^2.6.10",
     "vue-emoji-picker": "^1.0.1"
   }
 }

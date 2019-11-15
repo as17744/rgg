@@ -5,7 +5,7 @@ const path = require('path');
 const mime = require('mime');
 const chatServer = require('./lib/chat_server');
 const dataResponse = require('./lib/controller/center');
-const port = 80;
+const port = 8080;
 const cache = {};
 
 const sendMiss = (res) => {
@@ -53,7 +53,7 @@ const server = http.createServer();
 server.on('request', (req, res) => {
     let target = '';
     if (req.url.indexOf('.html') > -1 && req.url.indexOf('index.html') === -1) {
-        const catalogList  = req.url.match(/^(\/)(\w*)(\.html)/);
+        const catalogList = req.url.match(/^(\/)((\w|\-)*)(\.html)/);
         const targetDirectory = catalogList[2];
         target =  `./dist/${targetDirectory}/index.html`;
     } else {
