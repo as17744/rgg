@@ -14,7 +14,8 @@ Object.keys(entries).forEach((key) => {
         entry,
         resolve: {
             alias: {
-                vue: 'vue/dist/vue.js'
+                vue: 'vue/dist/vue.js',
+                vuex: 'vuex/dist/vuex.esm.js'
             },
             modules: ['./doc', 'node_modules'],
         },

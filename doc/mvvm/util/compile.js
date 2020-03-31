@@ -15,7 +15,7 @@ const compileUtil = { // 统一的编译方法
     },
     bind(node, vm, exp, type) {
         const updateFunction = updater[`${type}Updater`];
-        typeof updateFunction === 'function' && updateFunction(node, this._getVMVal(vm, exp));
+        typeof updateFunction === 'function' && updateFunction(node, this._getVMVal(vm, exp)); // 把模版上绑定的数据附上
         new Watcher(vm, exp, (val, oldval) => {
             typeof updateFunction === 'function' && updateFunction(node, val, oldval);
         });

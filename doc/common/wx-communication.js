@@ -12,7 +12,9 @@
  * 获取当前的页面实例
  * @returns {any}
  */
-export const getCurrentPage = () => window.vue_page;
+import {getCurrentPage} from 'src/wxmp/common/js/wxmp';
+
+export {getCurrentPage};
 
 const noop = () => false;
 
@@ -21,16 +23,16 @@ const noop = () => false;
  */
 export const eventBus = {
     on(event, cb) {
-        getCurrentPage().$on(`eventBus.${event}`, cb);
+        getCurrentPage().eventBus.on(`eventBus.${event}`, cb);
     },
     once(event, cb) {
-        getCurrentPage().$once(`eventBus.${event}`, cb);
+        getCurrentPage().eventBus.once(`eventBus.${event}`, cb);
     },
     off(event, cb) {
-        getCurrentPage().$off(`eventBus.${event}`, cb);
+        getCurrentPage().eventBus.off(`eventBus.${event}`, cb);
     },
     emit(event, options = {}, cb = noop) {
-        getCurrentPage().$emit(`eventBus.${event}`, options, cb);
+        getCurrentPage().eventBus.emit(`eventBus.${event}`, options, cb);
     },
     /**
      * 返回promise的emit(需要时间处理函数的参数为(options,cb),并且必须执行cb)
@@ -40,7 +42,7 @@ export const eventBus = {
      */
     emitWithReturn(event, options = {}) {
         return new Promise((resolve) => {
-            getCurrentPage().$emit(`eventBus.${event}`, options, resolve);
+            getCurrentPage().eventBus.emit(`eventBus.${event}`, options, resolve);
         });
     },
 };
@@ -53,13 +55,6 @@ const keyToAry = (key) => key
     .filter((item) => item);
 // 通过key(支持层级格式如:a.b[c][d].e[f])获取值
 const getValueByKey = (target, key) => keyToAry(key).reduce((obj, item) => obj[item], target);
-// 通过key设值
-const setValueByKey = (target, key, value) => {
-    key = keyToAry(key);
-    const lastKey = key.pop();
-    target = key.reduce((obj, item) => obj[item], target);
-    target[lastKey] = value;
-};
 
 /**
  * 状态管理
@@ -78,10 +73,10 @@ export const store = {
         if (Array.isArray(arg)) {
             ret = {};
             arg.forEach((key) => {
-                ret[key] = getValueByKey(page, key);
+                ret[key] = getValueByKey(page.data, key);
             });
         } else {
-            ret = getValueByKey(page, arg);
+            ret = getValueByKey(page.data, arg);
         }
         return ret;
     },
@@ -94,42 +89,42 @@ export const store = {
     setData(key, value) {
         const page = getCurrentPage();
         if (typeof key === 'object') {
-            Object.keys(key).forEach((item) => {
-                setValueByKey(page, item, key[item]);
-            });
+            page.setData(key);
         } else {
-            setValueByKey(page, key, value);
+            let data = {};
+            data[key] = value;
+            page.setData(data);
         }
     },
 };
 
-const getPublicFunc = (methods) => Object.keys(methods).filter((key) => (key[0] !== '_'));
-
-export const communicationMix = {
-    created() {
-        const {methods = {}, name} = this.$options;
-        const page = getCurrentPage();
-        if (page) {
-            if (name) {
-                getPublicFunc(methods).forEach((funcName) => (eventBus.on(`${name}.${funcName}`, this[funcName])));
-            }
-            this.$bus = eventBus;
-            this.$store = store;
-            this.$page = page;
-        } else {
-            this.$bus = eventBus;
-            this.$store = store;
+/**
+ * 含name的组件自动注册事件(页面本身不注册事件)
+ * 提供$bus,$store,$page
+ */
+/* eslint-disable no-undef */
+export const communicationMix = Behavior({
+    attached() {
+        const {__name__: name, __methods__: methods} = this.data;
+        if (name) {
+            methods.forEach((funcName) => {
+                const func = this[funcName].bind(this);
+                this[funcName] = func;
+                eventBus.on(`${name}.${funcName}`, func);
+            });
         }
+        this.$bus = eventBus;
+        this.$store = store;
+        this.$page = getCurrentPage();
     },
     beforeDestroy() {
         // 事件需要销毁,不然会越积越多
-        const {methods = {}, name} = this.$options;
-        if (name && this !== getCurrentPage()) {
-            getPublicFunc(methods).forEach((funcName) => (eventBus.off(`${name}.${funcName}`, this[funcName])));
+        const {__name__: name, __methods__: methods} = this.data;
+        if (name) {
+            methods.forEach((funcName) => (eventBus.off(`${name}.${funcName}`, this[funcName])));
         }
         this.$bus = null;
         this.$store = null;
         this.$page = null;
     },
-};
-
+});
