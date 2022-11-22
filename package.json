@@ -43,7 +43,7 @@
     "koa-xtpl": "^2.1.1",
     "mime": "^2.3.1",
     "phaser": "^3.18.1",
-    "socket.io": "^2.1.1",
+    "socket.io": "^2.5.0",
     "vue": "^2.6.10",
     "vue-emoji-picker": "^1.0.1",
     "vue-router": "^3.1.3",
